@@ -1,0 +1,39 @@
+{
+  "server_name": "greeter",
+  "etcd": {
+    "address": "127.0.0.1:2379"
+  },
+  "rate_limit": {
+    "rate": 1000
+  },
+  "web": {
+    "address": ":8111"
+  },
+  "db":{
+    "name": "mysql",
+    "address": "root:33css@tcp(127.0.0.1:33060)/gotest?charset=utf8"
+  },
+  "user_rpc_server": {
+    "client_name": "user.rpc.client",
+    "server_name":"user.rpc.server"
+  },
+  "im_rpc_server": {
+    "server_name": "im.rpc.server",
+    "im_server_list": [{
+      "address": "127.0.0.1:7272",
+      "amqb_address": [],
+      "topic": "im.server.1",
+      "server_name": "im.server.1",
+      "weight": 100
+    },
+      {
+      "address": "127.0.0.1:7273",
+      "amqb_address": [],
+      "topic": "im.server.2",
+      "server_name": "im.server.2",
+        "weight": 100
+      }
+    ]
+  }
+
+}

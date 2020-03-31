@@ -1,0 +1,13 @@
+{
+  "server_name": "user.rpc.server",
+  "etcd": {
+    "address": "127.0.0.1:2379"
+  },
+  "rate_limit": {
+    "rate": 1000
+  },
+  "db":{
+    "name": "mysql",
+    "address": "root:33css@tcp(127.0.0.1:33060)/gotest?charset=utf8"
+  }
+}

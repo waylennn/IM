@@ -1,0 +1,32 @@
+{
+  "server_name": "im.rpc.server",
+  "etcd": {
+    "address": "127.0.0.1:2379"
+  },
+  "rate_limit": {
+    "rate": 1000
+  },
+  "db":{
+    "name": "mysql",
+    "address": "root:33css@tcp(127.0.0.1:33060)/gotest?charset=utf8"
+  },
+  "rabbitMq": {
+    "address": [],
+    "topic": "im.server.1"
+  },
+  "im_server_list": [{
+    "address": "127.0.0.1:7272",
+    "amqb_address": [],
+    "topic": "im.server.1",
+    "server_name": "im.server.1",
+    "weight": 100
+  },
+    {
+      "address": "127.0.0.1:7273",
+      "amqb_address": [],
+      "topic": "im.server.2",
+      "server_name": "im.server.2",
+      "weight": 100
+    }
+  ]
+}
