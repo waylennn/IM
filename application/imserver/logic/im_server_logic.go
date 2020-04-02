@@ -1,6 +1,7 @@
 package logic
 
 import (
+	"awesomeProject/application/imserver/mod"
 	"awesomeProject/application/utils"
 	"encoding/json"
 	"fmt"
@@ -88,6 +89,11 @@ func (l *ImServer) SendMsg(r *SendMsgRequest) (*SendMsgResponse, error) {
 	log.Printf("send SendMsgRequest  %+v", r)
 	conn := l.clients[r.ToToken]
 	if conn == nil {
+		fmt.Println(r.TimeStamp)
+		err := mod.SaveOfflineMsg(r.FromToken,r.ToToken,r.Body,time.Now().Unix())
+		if err != nil {
+			fmt.Println(err)
+		}
 		return nil, &errors.Error{
 			Code:   utils.ErrConnTokenFailed,
 			Detail: "用户连接不存在",
@@ -101,6 +107,11 @@ func (l *ImServer) SendMsg(r *SendMsgRequest) (*SendMsgResponse, error) {
 		return nil, err
 	}
 	if err := conn.WriteMessage(websocket.TextMessage, bodyMsg); err != nil {
+		err := mod.SaveOfflineMsg(r.FromToken,r.ToToken,r.Body,r.TimeStamp)
+		if err != nil {
+			fmt.Println(err)
+		}
+
 		log.Printf("send message err %v", err)
 		l.clients[r.ToToken] = nil
 		log.Println(conn.Close())
@@ -112,6 +123,7 @@ func (l *ImServer) SendMsg(r *SendMsgRequest) (*SendMsgResponse, error) {
 
 func (l *ImServer) Subscribe() {
 	err := l.rabbitMqBroker.Subscribe(func(topic string, body []byte) {
+		fmt.Println(string(body))
 		senRes := &SendMsgRequest{
 			//FromToken:     "",
 			//ToToken:       "",
@@ -157,6 +169,22 @@ func (l *ImServer) login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	l.clients[loginMsgRequest.Token] = conn
+	res,err := mod.GetOffLineMsg(loginMsgRequest.Token)
+	if err != nil {
+		log.Printf("json.Unmarshal msg err %+v", err)
+		return
+	}
+	res_byte,err := json.Marshal(res)
+	if err != nil {
+		log.Printf("json.Unmarshal msg err %+v", err)
+		return
+	}
+	err = conn.WriteMessage(websocket.TextMessage,res_byte)
+	if err != nil {
+		log.Printf("json.Unmarshal msg err %+v", err)
+		return
+	}
+
 	return
 }
 

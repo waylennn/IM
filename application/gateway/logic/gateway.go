@@ -27,7 +27,7 @@ func Send(c *gin.Context) {
 	fromToken := c.DefaultPostForm("fromToken", "")
 	toToken := c.DefaultPostForm("toToken", "")
 	body := c.DefaultPostForm("body", "")
-	timestamp := c.DefaultPostForm("timestamp", "")
+	timestamp := c.DefaultPostForm("timeStamp", "")
 	if fromToken == "" || toToken == "" || timestamp == "" {
 		utils.ResponseError(c, utils.ErrCodeParamNotExist, nil)
 		return

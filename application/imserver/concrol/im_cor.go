@@ -5,7 +5,6 @@ import (
 	im "awesomeProject/application/imserver/protoc"
 	"context"
 	"encoding/json"
-	"fmt"
 	"github.com/micro/go-micro/v2/broker"
 )
 

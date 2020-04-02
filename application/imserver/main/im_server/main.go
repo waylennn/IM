@@ -3,6 +3,7 @@ package main
 import (
 	"awesomeProject/application/imserver/logic"
 	"awesomeProject/application/imserver/main/config"
+	"awesomeProject/application/imserver/mod"
 	"fmt"
 	"github.com/juju/ratelimit"
 	micro "github.com/micro/go-micro/v2"
@@ -38,6 +39,10 @@ func main() {
 
 	// Init will parse the command line flags.
 	service.Init()
+	err = mod.InitModEngine(conf.DB.Name,conf.DB.Address)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	rmqBrokerRegistry := rabbitmq.NewBroker()
 	rmqBroker, err := logic.NewRMqBroker(conf.RabbitMq.Topic, rmqBrokerRegistry)
